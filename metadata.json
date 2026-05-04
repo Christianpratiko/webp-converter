@@ -1,0 +1,6 @@
+{
+  "name": "WebP Converter",
+  "description": "Convert images to high-quality, low-size WebP format locally in your browser.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
