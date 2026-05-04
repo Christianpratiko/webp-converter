@@ -373,6 +373,31 @@ export default function App() {
                    </div>
                 </div>
 
+                {/* Floating Quality Control for Fullscreen */}
+                {isFullscreen && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[60] bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-xl w-[90%] max-w-sm flex flex-col gap-3 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="quality-fs" className="text-sm font-semibold flex items-center gap-2 text-gray-700 pointer-events-none">
+                          <Settings className="w-4 h-4 text-gray-400" />
+                          Compression Quality
+                        </label>
+                        <span className="text-sm font-mono bg-gray-100 px-2 py-0.5 rounded text-gray-600 pointer-events-none">
+                          {Math.round(quality * 100)}%
+                        </span>
+                      </div>
+                      <input
+                        id="quality-fs"
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={quality}
+                        onChange={(e) => setQuality(parseFloat(e.target.value))}
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                  </div>
+                )}
+
                 {/* Fullscreen Toggle Button */}
                 <button
                   onClick={toggleFullscreen}
