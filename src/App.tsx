@@ -159,21 +159,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      <header className="bg-white border-b border-gray-200 py-6 px-4 md:px-8 shadow-sm">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-indigo-600 p-2 rounded-xl shadow-inner">
-              <FileImage className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-gray-900">WebP Optimizer</h1>
-              <p className="text-xs font-medium text-gray-500">Fast, High-Detail, Small Size</p>
-            </div>
-          </div>
+      {/* Fixed Brand Info */}
+      <div className="fixed top-6 left-6 z-[60] flex items-center gap-3 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-sm border border-gray-200/50">
+        <div className="bg-indigo-600 p-1.5 text-lg shadow-inner rounded-xl leading-none">
+          🌙
         </div>
-      </header>
+        <div>
+          <h1 className="text-sm font-bold tracking-tight text-gray-900">Eluna WebP</h1>
+          <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider leading-tight">Optimizer</p>
+        </div>
+      </div>
 
-      <main className="max-w-5xl mx-auto px-4 md:px-8 py-12">
+      <main className="max-w-5xl mx-auto px-4 md:px-8 pt-28 pb-12 relative z-10">
         <AnimatePresence mode="wait">
           {!originalFile ? (
             <motion.div

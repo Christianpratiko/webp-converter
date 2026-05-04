@@ -1,6 +1,6 @@
 {
-  "name": "WebP Converter",
-  "description": "Convert images to high-quality, low-size WebP format locally in your browser.",
+  "name": "Eluna WebP",
+  "description": "Convert images to high-quality, low-size WebP format locally in your browser. With a fast slider comparison feature.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
