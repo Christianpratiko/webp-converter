@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { UploadCloud, FileImage, Download, RefreshCcw, Settings, ArrowRight, CheckCircle2, AlertCircle, MoveHorizontal, Maximize, Minimize } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -20,6 +20,54 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement) {
+        setIsFullscreen(true);
+      } else {
+        setIsFullscreen(false);
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      // Handle Escape in CSS fallback mode
+      if (e.key === 'Escape' && isFullscreen && !document.fullscreenElement) {
+        setIsFullscreen(false);
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isFullscreen]);
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => setIsFullscreen(false));
+      }
+    } else {
+      if (isFullscreen) {
+        setIsFullscreen(false); // Manually exiting CSS fallback
+      } else {
+        if (containerRef.current) {
+          if (containerRef.current.requestFullscreen) {
+            containerRef.current.requestFullscreen().catch(() => {
+              // Fallback to CSS full-window mode if native is blocked (e.g., iframe)
+              setIsFullscreen(true);
+            });
+          } else {
+            setIsFullscreen(true);
+          }
+        }
+      }
+    }
+  };
 
   const handleConvert = useCallback(
     async (file: File, q: number) => {
@@ -237,11 +285,12 @@ export default function App() {
 
               {/* Slider View */}
               <div 
+                ref={containerRef}
                 className={cn(
-                  "relative w-full overflow-hidden bg-gray-100 border-gray-200 shadow-inner group transition-all duration-300",
+                  "relative w-full overflow-hidden shadow-inner group transition-all duration-300",
                   isFullscreen 
-                    ? "fixed inset-0 z-50 h-screen" 
-                    : "border rounded-3xl mb-8 h-[50vh] sm:h-[60vh] md:h-[70vh]"
+                    ? "fixed inset-0 z-[100] h-screen bg-gray-900" 
+                    : "bg-gray-100 border border-gray-200 rounded-3xl mb-8 h-[50vh] sm:h-[60vh] md:h-[70vh]"
                 )}
               >
                 {/* Checkerboard background for transparency */}
@@ -326,7 +375,7 @@ export default function App() {
 
                 {/* Fullscreen Toggle Button */}
                 <button
-                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  onClick={toggleFullscreen}
                   className="absolute bottom-4 right-4 z-50 p-2 md:p-3 bg-white/80 hover:bg-white backdrop-blur shadow-lg rounded-xl text-gray-700 hover:text-gray-900 transition-all cursor-pointer opacity-0 group-hover:opacity-100 focus:opacity-100"
                   aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
                 >
